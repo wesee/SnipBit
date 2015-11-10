@@ -1,12 +1,24 @@
 
 var http = require('http');
+var url = require('url');
 
-http.createServer(function(request, response){
-	// 200 'OK'
-	response.writeHead(200, {"Content-Type": "text/plain"});
-	// Write to document
-	response.write("Here's SnipBit");
-	// End response
-	response.end();
+//Declare start module
+//Takes any function as a parameter
+//handle is an object, defined in index.js
+function start(route, handle) {
 
-}).listen(8888); //listen on url port 8888 view on http:/ip:8888
+	function onRequest(request, response) {
+		var pathname = url.parse(request.url).pathname;
+		console.log(pathname);
+		//route the request to the proper handler
+		//The arguments passed to this start module
+		route(handle, pathname, response);
+	}
+
+	//Create the server
+	http.createServer(onRequest).listen(8888);
+	console.log("Server has started. See on http://ip:8888");
+}
+
+//Export start module for use in other files
+exports.start = start;
