@@ -25,14 +25,23 @@ function pay(response){
 
 	//make an output
 	//UPDATE THIS LATER
-	var tx = new bitcore.Transaction();
-		tx.to('1ZquFz5Pc2KLaY1mrZdXD6DyprgtsjiR5', 10);
-	var output = tx.getChangeOutput();
+	//make an output
+	var address = bitcore.Address.fromString('1ZquFz5Pc2KLaY1mrZdXD6DyprgtsjiR5');
+	var script = bitcore.Script.buildPublicKeyHashOut(address);
+	var raw_script = new Buffer(script.toString(), 'ascii');
+
+	var outputs = new PaymentProtocol().makeOutput();
+	outputs.set('amount', 10);
+	outputs.set('script', raw_script);
+
+	//var tx = new bitcore.Transaction();
+	//	tx.to('1ZquFz5Pc2KLaY1mrZdXD6DyprgtsjiR5', 10);
+	//var output = tx.getChangeOutput();
 
 	//Make an object for payment details
 	var details = new PaymentProtocol().makePaymentDetails();
 	details.set('network', 'main');
-	details.set('outputs', output);
+	details.set('outputs', outputs.message);
 	details.set('time', now);
 	details.set('expires', now + 60 * 60 * 24);
 	details.set('memo', 'A Paymet Request from SnipBit');
@@ -54,10 +63,9 @@ function pay(response){
 
 	// serialize the request
 	var rawbody = request.serialize();
-	console.log(rawbody.length);
 
 	response.writeHead(200, {
-		'Content-Type': 'application/bitcoin-paymentrequest', //infor in BIP 71
+		'Content-Type': 'application/bitcoin-paymentrequest', //info in BIP 71
 		'Content-Length': rawbody.length,
 		'Content-Encoding': 'binary'
 	});
