@@ -6,7 +6,7 @@ var requestHandlers = require('./requestHandlers');
 var handle = {};
 handle['/'] = requestHandlers.hello;
 handle['/pay'] = requestHandlers.pay;
-handle['/ack'] = requestHandlers.ack;
+//handle['/ack'] = requestHandlers.ack;
 
 //Start server
 server.start(router.route, handle);
