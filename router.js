@@ -1,10 +1,12 @@
-function route(handle, pathname, response) {
+
+function route(handle, pathname, request, rawPaymentbody, response) {
 
 	//check if pathname exists
 	if (typeof handle[pathname] === 'function') {
 		//run request handler
-		handle[pathname](response);
-	} else {
+		handle[pathname](response, rawPaymentbody, request);
+	}
+	else {
 		//no page found
 		console.log("No request handler found for " + pathname);
 		//update staus
