@@ -26,21 +26,17 @@ function pay(response){
 	//make an output
 	//UPDATE THIS LATER
 	//make an output
-	var address = bitcore.Address.fromString('1ZquFz5Pc2KLaY1mrZdXD6DyprgtsjiR5');
+	var address = bitcore.Address.fromString('n2eMqTT929pb1RDNuqEnxdaLau1rxy3efi');
 	var script = bitcore.Script.buildPublicKeyHashOut(address);
-	var raw_script = new Buffer(script.toString(), 'ascii');
+	var raw_script = script.toBuffer(); //new Buffer(script.toString(), 'ascii');
 
 	var outputs = new PaymentProtocol().makeOutput();
-	outputs.set('amount', 10);
+	outputs.set('amount', 1000);
 	outputs.set('script', raw_script);
-
-	//var tx = new bitcore.Transaction();
-	//	tx.to('1ZquFz5Pc2KLaY1mrZdXD6DyprgtsjiR5', 10);
-	//var output = tx.getChangeOutput();
 
 	//Make an object for payment details
 	var details = new PaymentProtocol().makePaymentDetails();
-	details.set('network', 'main');
+	details.set('network', 'test');
 	details.set('outputs', outputs.message);
 	details.set('time', now);
 	details.set('expires', now + 60 * 60 * 24);
@@ -65,7 +61,7 @@ function pay(response){
 	var rawbody = request.serialize();
 
 	response.writeHead(200, {
-		'Content-Type': 'application/bitcoin-paymentrequest', //info in BIP 71
+		'Content-Type': PaymentProtocol.PAYMENT_REQUEST_CONTENT_TYPE, //info in BIP 71
 		'Content-Length': rawbody.length,
 		'Content-Encoding': 'binary'
 	});
@@ -75,8 +71,8 @@ function pay(response){
 	response.end();
 }
 
-//function ack(response){
-//	response.write
+//function ack(request, rawPaymentbody, response){
+	
 //}
 
 //Export methods for use in other files
