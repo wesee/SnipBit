@@ -1,24 +1,26 @@
 var PaymentProtocol = require('bitcore-payment-protocol');
 var bitcore = require('bitcore-lib');
 var querystring = require('querystring');
-	fs = require('fs');
+var fs = require('fs');
 
 //for requests with / path
 function hello(response){
-	console.log("Request handler '/' called.");
 
-	response.writeHead(200, {'Content-Type':'text/html'});
-	//replace this for html page
-	response.write(
-		'<html>' + '<head>' + '</head>' + '<body>' + '<a href="bitcoin:?r=http://198.199.70.166:8888/pay">Click here to pay</a>' + 
-		'</body>' + '</body>'
-	);
-	response.end();
+	fs.readFile('postpreview.html', function(error, content) {
+		if (error) {
+			response.writeHead(500);
+			response.end();
+		}
+		else {
+			response.writeHead(200, { 'Content-Type': 'text/html' });
+			response.write(content);
+			response.end();
+		}
+	});
 }
 
 //for request with /pay path
 function pay(response){
-	console.log("Request handler '/pay' called.")
 
 	//get current time
 	var now = Date.now() / 1000 | 0;
@@ -26,7 +28,7 @@ function pay(response){
 	//make an output
 	//UPDATE THIS LATER
 	//make an output
-	var address = bitcore.Address.fromString('n2eMqTT929pb1RDNuqEnxdaLau1rxy3efi');
+	var address = bitcore.Address.fromString('1J3HDEarLhjRNNjdfYfE1ZJyC95aPdL3wQ');
 	var script = bitcore.Script.buildPublicKeyHashOut(address);
 	var raw_script = script.toBuffer(); //new Buffer(script.toString(), 'ascii');
 
@@ -36,11 +38,11 @@ function pay(response){
 
 	//Make an object for payment details
 	var details = new PaymentProtocol().makePaymentDetails();
-	details.set('network', 'test');
+	details.set('network', 'main');
 	details.set('outputs', outputs.message);
 	details.set('time', now);
 	details.set('expires', now + 60 * 60 * 24);
-	details.set('memo', 'A Paymet Request from SnipBit');
+	details.set('memo', 'Space Article');
 	details.set('payment_url', 'http://198.199.70.166:8888/ack');
 	details.set('merchant_data', new Buffer({size: 7})); // identify the request
 
