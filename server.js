@@ -65,7 +65,7 @@ function start(route, handle) {
 
 		} else {
 			//route the request to the proper handler
-			route(handle, pathname, request, rawPaymentBody, response);
+			route(handle, pathname, request, response);
 		}
 	}
 

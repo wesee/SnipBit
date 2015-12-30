@@ -4,8 +4,11 @@ var requestHandlers = require('./requestHandlers');
 
 //Make an object containing request handlers for different paths
 var handle = {};
-handle['/'] = requestHandlers.hello;
+handle['/'] = requestHandlers.article;
 handle['/pay'] = requestHandlers.pay;
+handle['/home'] = requestHandlers.home;
+handle['/auth'] = requestHandlers.auth;
+handle['/oauth/callback'] = requestHandlers.oauthCallback;
 //handle['/ack'] = requestHandlers.ack;
 
 //Start server

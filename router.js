@@ -1,10 +1,10 @@
 
-function route(handle, pathname, request, rawPaymentbody, response) {
+function route(handle, pathname, request, response) {
 
 	//check if pathname exists
 	if (typeof handle[pathname] === 'function') {
 		//run request handler
-		handle[pathname](response, rawPaymentbody, request);
+		handle[pathname](response, request);
 	}
 	else {
 		//no page found

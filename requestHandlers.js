@@ -2,9 +2,86 @@ var PaymentProtocol = require('bitcore-payment-protocol');
 var bitcore = require('bitcore-lib');
 var querystring = require('querystring');
 var fs = require('fs');
+var url = require('url');
+var request = require('request');
+
+
+//TESTING COINBASE OAUTH
+function home(response, req) {
+
+	fs.readFile('oauthresp.html', function(error, content) {
+		if (error) {
+			response.writeHead(500);
+			response.end();
+		}
+		else {
+			var search = url.parse(req.url).search;
+			var searchArray = search.split("=");
+			var code = searchArray[1];
+
+			//load the page
+			response.writeHead(200, { 'Content-Type': 'text/html' });
+			response.write(content);
+
+			//make post request url
+			var clientId = "63048e52144cce0dea1e079bdbe143c2b05d4c0e9a5a70d3e0980631b32283b7";
+			var clientSecret = "eb85d2f2f5681ffee16f448b44aa01822e9a1b88ffe738c2246300f68d82fcde";
+			
+			var postUrl = "https://api.coinbase.com/oauth/token?grant_type=authorization_code&code=" + code;
+			postUrl += "&client_id=" + clientId;
+			postUrl += "&client_secret=" + clientSecret;
+			postUrl += "&redirect_uri=http%3A%2F%2F198.199.70.166%3A8888%2Foauth%2Fcallback"
+			console.log(postUrl);
+
+			request(postUrl, function (error, resp, body) {
+				if (!error && resp.statusCode == 200) {
+					console.log(resp);
+					console.log(body);
+				} else {
+					console.log(error);
+				}
+			});
+
+			response.end();
+		}
+	});
+
+}
+
+//TESTING COINBASE OAUTH
+function auth(response) {
+
+	fs.readFile('auth.html', function(error, content) {
+		if (error) {
+			response.writeHead(500);
+			response.end();
+		}
+		else {
+			response.writeHead(200, { 'Content-Type': 'text/html' });
+			response.write(content);
+			response.end();
+		}
+	});
+}
+
+//TESTING COINBASE OAUTH
+function oauthCallback(response) {
+
+	fs.readFile('oauthCallback.html', function(error, content) {
+		if (error) {
+			response.writeHead(500);
+			response.end();
+		}
+		else {
+			response.writeHead(200, { 'Content-Type': 'text/html' });
+			response.write(content);
+			response.end();
+		}
+	});
+}
 
 //for requests with / path
-function hello(response){
+function article(response) {
 
 	fs.readFile('postpreview.html', function(error, content) {
 		if (error) {
@@ -20,7 +97,7 @@ function hello(response){
 }
 
 //for request with /pay path
-function pay(response){
+function pay(response) {
 
 	//get current time
 	var now = Date.now() / 1000 | 0;
@@ -78,6 +155,9 @@ function pay(response){
 //}
 
 //Export methods for use in other files
-exports.hello = hello;
+exports.article = article;
+exports.home = home;
+exports.auth = auth;
 exports.pay = pay;
+exports.oauthCallback = oauthCallback;
 //exports.ack = ack;
