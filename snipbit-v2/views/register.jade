@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1= title
+	.register-form
+		form(action="http://198.199.70.166:3000/user/register", method="post")
+			input(type='email', name='email', placeholder='Email', required)
+			input(type='password' name='password', placeholder='Password', id='first-password', required)
+			label(for='remember') Remember me
+			input(type='checkbox' name='remember', id='remember') 
+			input(type='submit', value='Register')
+	a(href="http://198.199.70.166:3000/user/login") Have an account? Login Here

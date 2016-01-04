@@ -2,7 +2,18 @@ var express = require('express');
 var querystring = require('querystring');
 var url = require('url');
 var requestLib = require('request');
+var mongoose = require('mongoose');
 var router = express.Router();
+
+//connect to database
+mongoose.connect('mongodb://198.199.70.166:27017/');
+
+//check to see if we have a connection
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log("Connected to db!");
+});
 
 router.get('/', function(req, res, next) {
   	res.render('index', { title: 'SnipBit' });

@@ -1,0 +1,11 @@
+extends layout
+
+block content
+	h1 Your Account:
+	div(style="display: #{ loggedInDisplay }")
+		p Email: #{ email }
+		a(href="http://198.199.70.166:3000/user/logout") Logout
+	div(style="display: #{ loggedOutDisplay }")
+		p You appear to not be logged in
+		a(href="http://198.199.70.166:3000/user/login") Login Here
+
